@@ -1,35 +1,57 @@
+import asyncio
+import logging.config
 import os
+
 from dotenv import load_dotenv
+from neo4j import GraphDatabase
+from neo4j_graphrag.embeddings.openai import OpenAIEmbeddings
+from neo4j_graphrag.experimental.components.embedder import TextChunkEmbedder
+from neo4j_graphrag.experimental.components.entity_relation_extractor import (
+    LLMEntityRelationExtractor,
+    OnError,
+)
+from neo4j_graphrag.experimental.components.kg_writer import Neo4jWriter
+from neo4j_graphrag.experimental.components.text_splitters.fixed_size_splitter import (
+    FixedSizeSplitter,
+)
+from neo4j_graphrag.experimental.pipeline import Pipeline
+from neo4j_graphrag.llm import OpenAILLM
+
 load_dotenv()
 
-from langchain_community.document_loaders import DirectoryLoader, TextLoader
-from langchain.text_splitter import CharacterTextSplitter
-from openai import OpenAI
-from neo4j import GraphDatabase
-
-COURSES_PATH = "1-knowledge-graphs-vectors/data/asciidoc"
-
-loader = DirectoryLoader(COURSES_PATH, glob="**/lesson.adoc", loader_cls=TextLoader)
-docs = loader.load()
-
-text_splitter = CharacterTextSplitter(
-    separator="\n\n",
-    chunk_size=1500,
-    chunk_overlap=200,
+# Set log level to DEBUG for all neo4j_graphrag.* loggers
+logging.config.dictConfig(
+    {
+        "version": 1,
+        "handlers": {
+            "console": {
+                "class": "logging.StreamHandler",
+            }
+        },
+        "loggers": {
+            "root": {
+                "handlers": ["console"],
+            },
+            "neo4j_graphrag": {
+                "level": "DEBUG",
+            },
+        },
+    }
 )
 
-chunks = text_splitter.split_documents(docs)
+# 1. Create the pipeline
 
-# Create a function to get the embedding
 
-# Create a function to get the course data
+# 2. Chunk the text
 
-# Create OpenAI object
 
-# Connect to Neo4j
+# 3. Embed the chunks
 
-# Create a function to run the Cypher query
 
-# Iterate through the chunks and create the graph
+# 4. Extract nodes and relationships from the chunks
 
-# Close the neo4j driver
+
+# 5. Create the knowledge graph
+
+
+# 6. Run the pipeline
